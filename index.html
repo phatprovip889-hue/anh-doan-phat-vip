@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Anh Đoàn Phát vip - Tạo độ nhạy</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#fff;background:radial-gradient(circle at 20% 10%,#123d72 0,#071426 35%,#02060d 100%);min-height:100vh}
+.wrap{max-width:680px;margin:auto;padding:22px 14px 35px}.brand{text-align:center;font-weight:900;font-size:30px;letter-spacing:1px;text-shadow:0 0 18px #238cff}.sub{text-align:center;color:#9fc9ff;margin:7px 0 20px}
+.card{background:rgba(5,16,31,.9);border:1px solid #1c6bc0;border-radius:18px;padding:18px;box-shadow:0 10px 35px #0008;margin-bottom:15px}
+label{display:block;font-weight:700;margin-bottom:9px}.input{width:100%;padding:16px;border-radius:12px;border:1px solid #377dca;background:#081a31;color:white;font-size:16px;outline:none}.input:focus{border-color:#58a9ff;box-shadow:0 0 0 3px #2b8cff22}
+button{width:100%;margin-top:13px;padding:16px;border:0;border-radius:12px;color:#fff;font-size:17px;font-weight:800;background:linear-gradient(90deg,#168cff,#753cff);cursor:pointer;box-shadow:0 8px 22px #146cff44}
+button:active{transform:scale(.99)}.hidden{display:none}.result-title{font-size:20px;font-weight:900}.device{color:#5daaff}.row{display:grid;grid-template-columns:1fr 70px;gap:10px;align-items:center;margin:13px 0}.name{font-weight:700}.bar{height:10px;border-radius:99px;background:#183454;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#159cff,#754cff);border-radius:99px}.val{font-size:20px;font-weight:900;text-align:center;border:1px solid #285f98;border-radius:10px;padding:9px;background:#081b33}.note{color:#9db9d8;font-size:13px;line-height:1.5}.again{background:#102b4b;border:1px solid #326da7;box-shadow:none}.footer{text-align:center;color:#6685a7;font-size:12px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">🔥 ANH ĐOÀN PHÁT VIP</div>
+  <div class="sub">Tạo độ nhạy Free Fire trên điện thoại</div>
+
+  <div class="card">
+    <label for="phone">📱 Nhập tên điện thoại</label>
+    <input id="phone" class="input" placeholder="Ví dụ: Redmi Note 14 Pro 5G" autocomplete="off">
+    <button onclick="generate()">✨ TẠO ĐỘ NHẠY</button>
+  </div>
+
+  <div id="result" class="card hidden">
+    <div class="result-title">🎯 Kết quả độ nhạy</div>
+    <div style="margin-top:5px">Dành cho: <b class="device" id="device"></b></div>
+    <div id="stats"></div>
+    <button class="again" onclick="generate()">🔄 TẠO LẠI</button>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:900;margin-bottom:8px">💡 Lưu ý</div>
+    <div class="note">Đây là bộ độ nhạy để test, không đảm bảo phù hợp tuyệt đối với mọi máy. Nếu kéo tâm quá nhanh/chậm, mày có thể tạo lại vài lần và chọn bộ hợp tay nhất.</div>
+  </div>
+  <div class="footer">Anh Đoàn Phát vip • Free Fire Sensitivity Generator</div>
+</div>
+
+<script>
+function seedFromString(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+  return h>>>0;
+}
+function rand(seed){return function(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function generate(){
+  const input=document.getElementById('phone');
+  const phone=input.value.trim();
+  if(!phone){input.focus();input.placeholder="Nhập tên điện thoại trước nhé!";return}
+  const r=rand(seedFromString(phone.toLowerCase()));
+  const general=Math.round(175+r()*25);
+  const red=Math.round(clamp(general-15+r()*12,145,200));
+  const x2=Math.round(clamp(red-15+r()*12,125,190));
+  const x4=Math.round(clamp(x2-10+r()*12,110,180));
+  const sniper=Math.round(70+r()*35);
+  const free=Math.round(110+r()*45);
+  const data=[
+    ["Tổng quan (General)",general],
+    ["Điểm đỏ (Red Dot)",red],
+    ["Ống ngắm 2x (2x Scope)",x2],
+    ["Ống ngắm 4x (4x Scope)",x4],
+    ["Ống ngắm súng ngắm (Sniper)",sniper],
+    ["Nhìn tự do (Free Look)",free]
+  ];
+  document.getElementById('device').textContent=phone;
+  document.getElementById('stats').innerHTML=data.map(x=>`
+    <div class="row"><div><div class="name">${x[0]}</div><div class="bar"><div class="fill" style="width:${x[1]/200*100}%"></div></div></div><div class="val">${x[1]}</div></div>
+  `).join('');
+  document.getElementById('result').classList.remove('hidden');
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.getElementById('phone').addEventListener('keydown',e=>{if(e.key==='Enter')generate()});
+</script>
+</body>
+</html>
